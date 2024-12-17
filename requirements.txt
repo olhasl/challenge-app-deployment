@@ -1,0 +1,5 @@
+Streamlit, version 1.41.0
+pandas
+os
+numpy
+catboost
