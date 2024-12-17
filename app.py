@@ -4,20 +4,23 @@ import os
 from preprocessing.cleaning_data import zip_to_province, preprocess
 from predict.prediction import predict
 
-st.set_page_config(page_title="challenge-app-deployment",  
-    page_icon="🏡",  
-    layout="centered",  
-    initial_sidebar_state="expanded"
+st.set_page_config(
+    page_title="challenge-app-deployment",
+    page_icon="🏡",
+    layout="centered",
+    initial_sidebar_state="expanded",
 )
 
 # Load data
 code_dir = os.path.dirname(os.path.realpath(__file__))  # Directory of the script
 data_path = os.path.join(code_dir, "./model/code_income_data.csv")
 
+
 @st.cache_data
 def load_data(data_path):
     """Load and cache data from CSV."""
     return pd.read_csv(data_path)
+
 
 df = load_data(data_path)
 
@@ -34,71 +37,94 @@ st.markdown(
 
 # Sidebar for user inputs
 with st.sidebar:
-    st.markdown('### ')
+    st.markdown("### ")
     st.header("Enter your property characteristics")
-    st.markdown('### ')
+    st.markdown("### ")
     property_type = st.selectbox(
-        "Subtype of Property", 
+        "Subtype of Property",
         [
-            'apartment', 'ground-floor', 'duplex', 'triplex', 'penthouse', 'loft',
-            'flat-studio', 'kot', 'service-flat', 'house', 'country-cottage',
-            'town-house', 'farmhouse', 'bungalow', 'villa', 'castle', 'chalet',
-            'mansion', 'manor-house', 'exceptional-property', 'apartment-block',
-            'mixed-use-building', 'other-property'
-        ]
+            "apartment",
+            "ground-floor",
+            "duplex",
+            "triplex",
+            "penthouse",
+            "loft",
+            "flat-studio",
+            "kot",
+            "service-flat",
+            "house",
+            "country-cottage",
+            "town-house",
+            "farmhouse",
+            "bungalow",
+            "villa",
+            "castle",
+            "chalet",
+            "mansion",
+            "manor-house",
+            "exceptional-property",
+            "apartment-block",
+            "mixed-use-building",
+            "other-property",
+        ],
     )
-    st.markdown('### ')
+    st.markdown("### ")
     livable_space = st.number_input(
-        "Property's Livable Space (m2)", 
-        min_value=10, max_value=1000
+        "Property's Livable Space (m2)", min_value=10, max_value=1000
     )
-    st.markdown('### ')
+    st.markdown("### ")
     property_state = st.radio(
-        "State of Property", 
+        "State of Property",
         [
-            'As new', 'Just renovated', 'Good', 'To be done up', 
-            'To renovate', 'To restore', 'Not specified'
-        ]
+            "As new",
+            "Just renovated",
+            "Good",
+            "To be done up",
+            "To renovate",
+            "To restore",
+            "Not specified",
+        ],
     )
-    st.markdown('### ')
-    zip_code = st.selectbox(
-        "Property's Postcode", 
-        sorted(df['Post code'].unique())
-    )
+    st.markdown("### ")
+    zip_code = st.selectbox("Property's Postcode", sorted(df["Post code"].unique()))
 
 property_province = zip_to_province(zip_code)
 
+
 # Function to display user inputs as a table
-def show_data(livable_space, property_type, zip_code, property_province, property_state):
+def show_data(
+    livable_space, property_type, zip_code, property_province, property_state
+):
     """Display the user's input data in a styled table."""
     data = {
-        'Attribute': [
-            'Subtype of Property',
-            'Livable Space (m2)',
-            'State of Property',
-            'Province',
-            "Property's Postcode"
+        "Attribute": [
+            "Subtype of Property",
+            "Livable Space (m2)",
+            "State of Property",
+            "Province",
+            "Property's Postcode",
         ],
-        'Value': [
+        "Value": [
             property_type,
             livable_space,
             property_state,
             property_province,
-            zip_code
-        ]
+            zip_code,
+        ],
     }
-    
-    st.markdown('### ')
+
+    st.markdown("### ")
     st.markdown("#### Your Data:")
 
     st.dataframe(
-        pd.DataFrame(data), 
+        pd.DataFrame(data),
         column_config={
             "Attribute": st.column_config.TextColumn(width="medium"),
             "Value": st.column_config.TextColumn(width="medium"),
         },
-        hide_index=True
+        hide_index=True,
     )
+
 
 # Display user input data
 show_data(livable_space, property_type, zip_code, property_province, property_state)
@@ -122,7 +148,7 @@ st.markdown(
         }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # Button for prediction
