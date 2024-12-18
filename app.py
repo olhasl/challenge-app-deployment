@@ -116,8 +116,11 @@ def show_data(
     st.markdown("### ")
     st.markdown("#### Your Data:")
 
+    df = pd.DataFrame(data)
+    df['Value'] = df['Value'].astype(str)
+
     st.dataframe(
-        pd.DataFrame(data),
+        df,
         column_config={
             "Attribute": st.column_config.TextColumn(width="medium"),
             "Value": st.column_config.TextColumn(width="medium"),
